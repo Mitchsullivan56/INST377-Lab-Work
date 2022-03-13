@@ -37,7 +37,7 @@ async function mainEvent() {
     form.addEventListener("submit", async (submitEvent) => {
       submitEvent.preventDefault();
       console.log("form submission");
-      const restoArray = dataHandler(arrayFromJson.data);
+      dataHandler(arrayFromJson.data);
     });
   }
 }
