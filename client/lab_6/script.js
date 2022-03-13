@@ -9,10 +9,11 @@ function dataHandler(dataArray) {
   console.table(dataArray);
   const range = [...Array(15).keys()];
   const listItems = range.map((item, index) => {
-    return getRandomIntInclusive(0, dataArray);
+    const restNum = getRandomIntInclusive(dataArray);
+    return restNum;
   });
   
-  console.log('list Items')
+  console.log(listItems);
   
   //range.forEach((item) => {
     //console.log("range item", item);
@@ -36,7 +37,7 @@ async function mainEvent() {
     form.addEventListener("submit", async (submitEvent) => {
       submitEvent.preventDefault();
       console.log("form submission");
-      dataHandler(arrayFromJson.data);
+      const restoArray = dataHandler(arrayFromJson.data);
     });
   }
 }
