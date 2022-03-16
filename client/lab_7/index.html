@@ -1,0 +1,43 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mitchell Sullivan's Lab 5</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <div class="header">Mitchell Sullivan's Lab 5</div>
+        <div class="columns">
+          <div class="page_item">
+            <form class="main_form">
+              <div class="form_item">
+                <label for="resto_name">Restaurant Name</label>
+                <input type="text" name="resto_name" id="resto_name" />
+              </div>
+
+              <div class="form_item">
+                <label for="zipcode">Zipcode</label>
+                <input type="text" name="zipcode" id="zipcode" />
+              </div>
+              <button class="button submit_button" type="submit">
+                Change Restaurants
+              </button>
+            </form>
+          </div>
+          <div class="page_item">
+            <h2>Restaurant List</h2>
+            <ul class="resto-list"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./script.js"></script>
+  </body>
+</html>
