@@ -23,7 +23,7 @@ function restoArrayMake(dataArray) {
 
 function createHtmlList(collection) {
   //console.log("fired Html Creator");
-  //console.table(collection);
+  //console.log(collection);
   const targetList = document.querySelector(".resto-list");
   targetList.innerHTML = "";
   collection.forEach((item) => {
@@ -49,26 +49,31 @@ async function mainEvent() {
   //console.log(arrayFromJson);
 
   if (arrayFromJson.length > 0) {
-    //Prevents a race condition
     submit.style.display = "block";
-
     let currentArray = [];
     resto.addEventListener("input", async (event) => {
-        if (currentArray === undefined) { return; }
-        console.log(event.target.value);
-        currentArray.filter((item) => {
-            console.log(item);
-            console.log(item.name);
-            return item.name.includes(event.target.value)
-        });
-        //console.log(matchResto);
+      console.log(event.target.value);
+
+      //if (currentArray.length < 1) {
+        //return;
+      //}
+      
+      const selectResto = arrayFromJson.filter((item) => {
+        const lowerName = item.name.toLowerCase();
+        const lowerValue = event.target.value.toLowerCase();
+        return lowerName.includes(lowerValue);
+      });
+
+      console.log(selectResto);
+      createHtmlList(selectResto);
     });
 
     form.addEventListener("submit", async (submitEvent) => {
       submitEvent.preventDefault();
       //console.log("form submission");
-      const restoArray = restoArrayMake(arrayFromJson);
-      createHtmlList(restoArray);
+      currentArray = restoArrayMake(arrayFromJson);
+      console.log(currentArray);
+      createHtmlList(currentArray);
     });
   }
 }
