@@ -34,6 +34,19 @@ function getRandomIntInclusive(min, max) {
     });
   }
   
+  function initMap() {
+    const map = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
+    }).addTo(map);
+    return map;
+  }
+
   async function mainEvent() {
     console.log("script loaded");
     const form = document.querySelector(".main_form");
@@ -41,13 +54,15 @@ function getRandomIntInclusive(min, max) {
   
     const resto = document.querySelector("#resto_name");
     const zipcode = document.querySelector("#zipcode");
-  
-    const results = await fetch(
-      "https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json"
-    );
-    const arrayFromJson = await results.json();
+    const map = initMap();
+    //const results = await fetch(
+      //"https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json"
+    //);
+    //const arrayFromJson = await results.json();
     //console.log(arrayFromJson);
-  
+    let arrayFromJson = {data: []};
+
+
     if (arrayFromJson.length > 0) {
       submit.style.display = "block";
       let currentArray = [];

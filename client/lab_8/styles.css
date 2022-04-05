@@ -11,6 +11,8 @@
       ‘Bitsream Vera Sans’, ‘Trebuchet MS’, Verdana, ‘Verdana Ref’, sans-serif;
     background-color: darkslategray;
   }
+
+  #map { height: 180px; }
   
   /* Page Layout */
   .columns {
@@ -49,6 +51,10 @@
     background-color: #efefef;
     height: fit-content;
     margin: 20px;
+  }
+
+  .page_item_wide {
+      width: 640px;
   }
   
   .form_item {
