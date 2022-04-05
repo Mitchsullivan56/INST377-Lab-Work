@@ -29,14 +29,14 @@ function createHtmlList(collection) {
   collection.forEach((item) => {
     const { name } = item;
     const displayName = name.toLowerCase();
-    const injectThisItem = `<li>${item.name}</li>`;
+    const injectThisItem = `<li>${displayName}</li>`;
     targetList.innerHTML += injectThisItem;
   });
 }
 
 function initMap(targetId) {
-  //const latLong = [38.784, 76.872]; - PG COUNTY
-  const map = L.map(targetId).setView([51.505, -0, 09], 9);
+  const latLong = [38.784, -76.872]; 
+  const map = L.map(targetId).setView(latLong, 9);
   L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
     {
@@ -51,6 +51,14 @@ function initMap(targetId) {
     }
   ).addTo(map);
   return map;
+}
+
+function addMapMarkers(map, collection) {
+    collection.forEach(item => {
+        const point = item.geocoded_column_1?.coordinates;
+        console.log(item.geocoded_column_1?.coordinates);
+        L.marker([point[1], point[0]]).addTo(map);
+    });
 }
 
 async function mainEvent() {
@@ -71,12 +79,12 @@ async function mainEvent() {
     console.log(arrayFromJson);
     localStorage.setItem("restaurants", JSON.stringify(arrayFromJson));
   }
-  const storedData = localStorage.getItem(retrievalVar);
-  //const storedDataArray = JSON.parse(storedData);
-  console.log(storedData);
+  const storedDataString = localStorage.getItem(retrievalVar);
+  const storedDataArray = JSON.parse(storedDataString);
+  console.log(storedDataArray);
   //let arrayFromJson = {data: []};
 
-  if (storedData.length > 0) {
+  if (storedDataArray.length > 0) {
     submit.style.display = "block";
     let currentArray = [];
     resto.addEventListener("input", async (event) => {
@@ -86,7 +94,7 @@ async function mainEvent() {
       //return;
       //}
 
-      const selectResto = arrayFromJson.filter((item) => {
+      const selectResto = storedDataArray.filter((item) => {
         const lowerName = item.name.toLowerCase();
         const lowerValue = event.target.value.toLowerCase();
         return lowerName.includes(lowerValue);
@@ -99,9 +107,10 @@ async function mainEvent() {
     form.addEventListener("submit", async (submitEvent) => {
       submitEvent.preventDefault();
       //console.log("form submission");
-      currentArray = restoArrayMake(arrayFromJson);
+      currentArray = restoArrayMake(storedDataArray);
       console.log(currentArray);
       createHtmlList(currentArray);
+      addMapMarkers(map, currentArray);
     });
   }
 }
