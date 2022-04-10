@@ -35,7 +35,7 @@ function createHtmlList(collection) {
 }
 
 function initMap(targetId) {
-  const latLong = [38.784, -76.872]; 
+  const latLong = [38.784, -76.872];
   const map = L.map(targetId).setView(latLong, 9);
   L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
@@ -54,11 +54,45 @@ function initMap(targetId) {
 }
 
 function addMapMarkers(map, collection) {
-    collection.forEach(item => {
-        const point = item.geocoded_column_1?.coordinates;
-        console.log(item.geocoded_column_1?.coordinates);
-        L.marker([point[1], point[0]]).addTo(map);
+  map.eachLayer((layer) => {
+    if (layer instanceof L.Marker) {
+      layer.remove();
+    }
+  });
+
+  collection.forEach((item) => {
+    const point = item.geocoded_column_1?.coordinates;
+    console.log(item.geocoded_column_1?.coordinates);
+    L.marker([point[1], point[0]]).addTo(map);
+  });
+}
+
+function refreshList(target, storage) {
+  target.addEventListener("click", async (event) => {
+    event.preventDefault();
+    localStorage.clear();
+    const results = await fetch(
+      "https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json"
+    );
+    const arrayFromJson = await results.json();
+    console.log(arrayFromJson);
+    localStorage.setItem(storage, JSON.stringify(arrayFromJson.data));
+    location.reload();
+  });
+}
+
+function inputListener(target) {
+  target.addEventListener("input", async (event) => {
+    console.log(event.target.value);
+    const selectResto = storedDataArray.filter((item) => {
+      const lowerName = item.name.toLowerCase();
+      const lowerValue = event.target.value.toLowerCase();
+      return lowerName.includes(lowerValue);
     });
+
+    console.log(selectResto);
+    createHtmlList(selectResto);
+  });
 }
 
 async function mainEvent() {
@@ -68,17 +102,22 @@ async function mainEvent() {
 
   const resto = document.querySelector("#resto_name");
   const zipcode = document.querySelector("#zipcode");
+
+  const refresh = document.querySelector("#refresh_list");
+
   const map = initMap("map");
   const retrievalVar = "restaurants";
 
-  if (localStorage.getItem(retrievalVar) === undefined) {
-    const results = await fetch(
-      "https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json"
-    );
-    const arrayFromJson = await results.json();
-    console.log(arrayFromJson);
-    localStorage.setItem("restaurants", JSON.stringify(arrayFromJson));
-  }
+  refreshList(refresh, retrievalVar);
+
+  //if (localStorage.getItem(retrievalVar) === undefined) {
+  //const results = await fetch(
+  //"https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json"
+  //);
+  //const arrayFromJson = await results.json();
+  //console.log(arrayFromJson);
+  //localStorage.setItem("restaurants", JSON.stringify(arrayFromJson));
+  //}
   const storedDataString = localStorage.getItem(retrievalVar);
   const storedDataArray = JSON.parse(storedDataString);
   console.log(storedDataArray);
